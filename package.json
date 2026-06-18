@@ -1,0 +1,12 @@
+{
+  "name": "baby-and-me-backend",
+  "version": "1.0.0",
+  "description": "寶寶與我 App 的後端代理伺服器，負責安全保管 Claude API Key",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
