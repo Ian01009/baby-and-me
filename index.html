@@ -248,7 +248,7 @@ audio{width:100%;border-radius:8px;}
 
 <div class="setup">
   <div class="status-row">
-    <div style="display:flex;align-items:center;"><div class="sdot" id="sdot"></div><span class="stxt" id="stxt">連線中…</span></div>
+    <div style="display:flex;align-items:center;"><div class="sdot" id="sdot"></div><span class="stxt" id="stxt">連線中…</span><button onclick="connect()" style="background:none;border:none;color:#7F77DD;font-size:11px;cursor:pointer;text-decoration:underline;padding:0;margin-left:6px;">重新連線</button></div>
     <div class="week-row">
       <span>孕週：<strong id="wdisplay" style="color:#534AB7;">24</strong> 週</span>
       <button onclick="showPage('settings')" style="background:none;border:none;color:#7F77DD;font-size:11px;cursor:pointer;text-decoration:underline;padding:0;margin-left:4px;">調整</button>
@@ -791,20 +791,28 @@ function updateMilestone(){
 // 後端伺服器網址 — 部署到 Render 後，請把這裡換成您實際的網址
 const BACKEND_URL='https://baby-and-me.onrender.com';
 
-async function connect(){
-  try{
-    const res=await fetch(BACKEND_URL+'/',{method:'GET'});
-    if(!res.ok) throw new Error('連線失敗');
-    connected=true;
-    document.getElementById('sdot').className='sdot on';
-    document.getElementById('stxt').textContent='已連線 ✓';
-    document.getElementById('fdesc').textContent='AI 已啟動，等媽媽說話 ✓';
-  }catch(e){
-    connected=false;
-    document.getElementById('sdot').className='sdot';
-    document.getElementById('stxt').textContent='連線失敗，請稍後再試';
-    document.getElementById('fdesc').textContent='連線異常，請檢查網路後重新整理頁面';
+async function connect(retries=4){
+  document.getElementById('stxt').textContent='連線中…';
+  for(let i=0;i<retries;i++){
+    try{
+      const res=await fetch(BACKEND_URL+'/',{method:'GET'});
+      if(!res.ok) throw new Error('連線失敗');
+      connected=true;
+      document.getElementById('sdot').className='sdot on';
+      document.getElementById('stxt').textContent='已連線 ✓';
+      document.getElementById('fdesc').textContent='AI 已啟動，等媽媽說話 ✓';
+      return;
+    }catch(e){
+      if(i<retries-1){
+        document.getElementById('stxt').textContent='伺服器啟動中，請稍候…';
+        await new Promise(r=>setTimeout(r,5000));
+      }
+    }
   }
+  connected=false;
+  document.getElementById('sdot').className='sdot';
+  document.getElementById('stxt').textContent='連線失敗，請稍後再試';
+  document.getElementById('fdesc').textContent='連線異常，請檢查網路後重新整理頁面';
 }
 
 function showPage(name){
@@ -1036,7 +1044,7 @@ function rmTypingBubble(){const e=document.getElementById('tw-msgs');if(e)e.remo
 
 async function send(){
   const inp=document.getElementById('tinput');const text=inp.value.trim();if(!text)return;
-  if(!connected){addBubble('fetus','請先輸入 API Key 並連線喔！');return;}
+  if(!connected){addBubble('fetus','目前還沒連線成功，請稍後再試一次，或重新整理頁面 🙏');return;}
   inp.value='';inp.style.height='auto';
   document.getElementById('sbtn').disabled=true;
   lastUserMsg=text;
