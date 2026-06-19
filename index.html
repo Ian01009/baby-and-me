@@ -304,8 +304,8 @@ audio{width:100%;border-radius:8px;}
 <!-- DIARY -->
 <div class="page" id="page-diary">
   <div class="page-pad">
-    <div class="section-title">此刻的心情</div>
-    <div style="font-size:11px;color:#aaa;margin-bottom:10px;">想到的時候，隨時點選一下，記錄當下的感受</div>
+    <div class="section-title">媽媽現在的心情</div>
+    <div style="font-size:11px;color:#aaa;margin-bottom:10px;">這裡記錄的是您（媽媽）自己的心情，想到的時候隨時點選一下，記錄當下的感受</div>
     <div class="mood-row">
       <button class="mood-btn" onclick="logMood(1,'😣','很不好')">😣<span>很不好</span></button>
       <button class="mood-btn" onclick="logMood(2,'😔','不太好')">😔<span>不太好</span></button>
@@ -315,10 +315,10 @@ audio{width:100%;border-radius:8px;}
     </div>
     <div id="mood-log-msg"></div>
 
-    <div class="section-title" style="margin-top:18px;">今日心情總覽</div>
+    <div class="section-title" style="margin-top:18px;">媽媽今日心情總覽</div>
     <div id="today-mood-card"></div>
 
-    <div class="section-title" style="margin-top:18px;">過去的心情記錄</div>
+    <div class="section-title" style="margin-top:18px;">媽媽過去的心情記錄</div>
     <div class="record-list" id="diary-list"></div>
   </div>
 </div>
@@ -797,7 +797,7 @@ async function connect(retries=4){
       connected=true;
       document.getElementById('sdot').className='sdot on';
       document.getElementById('stxt').textContent='已連線 ✓';
-      document.getElementById('fdesc').textContent='AI 已啟動，等媽媽說話 ✓';
+      document.getElementById('fdesc').textContent='我在這裡呢，等媽媽跟我說說話 💜';
       return;
     }catch(e){
       if(i<retries-1){
